@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block head %}
+<script type=text/javascript>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // import and load 100 messages sent in this channel
+        const messages = {{ messages|tojson }};
+        let counter = 0;
+        for (i = 0; i < messages.length; i++) {
+            if (messages[i].channel === {{ channel|tojson }} && counter < 100) {
+                const li = document.createElement('li');
+                li.innerHTML = messages[i].text + "<br> -" + messages[i].username + "<br>" + messages[i].time;
+                document.querySelector('#feed').append(li);
+                counter ++;
+            }
+        }
+    
+        // connect to socket server
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    
+        // broadcast new message to socket when user clicks send
+        socket.on('connect', () => {
+            document.querySelector('#button').onclick = () => {
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+' '+today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+                let message = {
+                    "text": document.getElementById('send').value,
+                    "username": localStorage.getItem('username'),
+                    "time": time,
+                    "channel": {{ channel|tojson }}            
+                    }
+                socket.emit('send message', message);
+                document.querySelector('#send').value = "";
+            };
+        });
+
+        // refresh message list when a new message is posted 
+        socket.on('post message', messages => {
+            document.querySelector("#feed").innerHTML = "";
+            let counter = 0;
+            for (i = 0; i < messages.length; i++) {
+                if (messages[i].channel === {{ channel|tojson }} && counter < 100) {
+                    const li = document.createElement('li');
+                    li.innerHTML = messages[i].text + "<br> -" + messages[i].username + "<br>" + messages[i].time;
+                    document.querySelector('#feed').append(li);
+                    counter ++;
+                }
+            }
+        });
+    });
+    
+    // save channel location in local storage and set redirect to true
+    window.onunload = () => {
+        localStorage.setItem('channel', window.location.href);
+        localStorage.setItem('redirect', true);
+    };
+    
+</script>
+{% endblock %}
+{% block main %}
+<p>channel: {{ channel }}</p>
+<br>
+<input type="text" id="send" name="send">
+<button id="button">send</button>
+<ul id="feed"></ul>
+{% endblock %}

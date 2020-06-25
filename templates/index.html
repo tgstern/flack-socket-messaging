@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block head %}
+<script type="text/javascript">
+        // load saved channel on window open
+            window.onload = () => {
+                if (localStorage.getItem('redirect') === 'true') {
+                    localStorage.setItem('redirect', false);
+                    window.location.assign(localStorage.getItem('channel'));
+                }
+            };
+</script>
+{% endblock %}
+{% block main %}
+<p>welcome to flack - a CS50 chat application</p>
+{% endblock %}

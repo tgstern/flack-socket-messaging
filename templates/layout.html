@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flack</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="static/style.css">
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            // prompt for username and save in local storage
+            if (!(localStorage.getItem('username'))) {
+                var username = ""
+                while (username == "" || username == null) {
+                    username = prompt('Please enter a username');
+                    }
+                localStorage.setItem('username', username);
+            }
+            // clear storage on logout button click
+            document.querySelector('#logout').onclick = () => {
+                localStorage.clear();
+                window.location.assign(location.protocol + '//' + document.domain + ':' + location.port);
+            }
+        });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    {% block head %} {% endblock %}
+</head>
+<body>
+<header>
+    <a id="title" href="/home">flack</a>
+    <nav>
+        <ul>
+            {% for channel in channels %}
+            <li><a href="/{{ channel }}">{{ channel }}</a></li>
+            {% endfor %}
+            <li><a href="/new">+ new</a></li>
+            <li><a href="/edit">~ edit</a></li>
+        </ul>
+    </nav>
+    <button id="logout">logout</button>
+</header>
+<main>
+    {% block main %} {% endblock %}
+</main>
+</body>
+</html>

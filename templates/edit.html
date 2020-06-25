@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block head %}
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#user').value = localStorage.getItem('username');
+});
+</script>
+{% endblock %}
+{% block main %}
+<form action="/edit" method="post">
+    <label for="clear">clear channel</label>
+    <br>
+    <select id="clear" name="clear">
+        <option value="">--none-selected--</option>
+        {% for channel in channels %}
+        <option value="{{ channel }}">{{ channel }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <br>
+    <label for="channels">remove channel</label>
+    <br>
+    <select id="channels" name="channels">
+        <option value="">--none-selected--</option>
+        {% for channel in channels %}
+        <option value="{{ channel }}">{{ channel }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <br>
+    <input type="checkbox" id="user" name="user" value="">
+    <label for="user">clear user messages</label>
+    <br>
+    <br>
+    <input type="submit" value="go">
+</form>
+{% endblock %}
