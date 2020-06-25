@@ -1,6 +1,4 @@
-# Project 2 - Flack
-
-Web Programming with Python and JavaScript
+# Slack-like Chat Messaging Application
 
 Web chat application hosted with Flask and live updating through Socket.IO. 
 Application.py contains the route to generate html templates, most of which 
@@ -25,3 +23,5 @@ delete all messages they have sent across the channels.
 If a user is on a channel and leaves the application, this is stored and loaded
 the first time they revisit the page. Lastly, there is a logout button clears
 local storage, removing the username and any saved tabs.
+
+Project 2 for HarvardX CS50: Web Programming with Python and JavaScript
